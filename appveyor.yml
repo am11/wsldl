@@ -10,6 +10,7 @@ build_script:
     cl /nologo /O2 /W4 /WX /Ob2 /Oi /Oy /Gs- /GF /Gy /Tc main.c /Fe:out\%%~nxD.exe Advapi32.lib Shell32.lib res\%%~nxD\res.res %VersionDefinition%)
 - ps: Compress-Archive -DestinationPath out\icons.zip -Path  (Get-ChildItem -Path out -Exclude Launcher.exe)
 - echo %APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED%
+- echo 1
 
 artifacts:
   - path: 'out\icons.zip'
