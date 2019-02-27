@@ -5,10 +5,9 @@ os: Visual Studio 2017
 build_script:
 - call "%ProgramFiles(x86)%\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat" x64
 - |
-  FOR /D /r %%D in ("res/*") DO ( ^
-    rc res\%%~nxD\res.rc   &&     ^
-    cl /O2 /W4 /WX /Ob2 /Oi /Oy /Gs- /GF /Gy /Tc main.c /Fe:wsldl.exe Advapi32.lib Shell32.lib res\%%~nxD\res.res)
+  FOR /D /r %D in ("res/*") DO ( ^
+    rc res\%~nxD\res.rc   &&     ^
+    cl /O2 /W4 /WX /Ob2 /Oi /Oy /Gs- /GF /Gy /Tc main.c /Fe:wsldl.exe Advapi32.lib Shell32.lib res\%~nxD\res.res)
 
 on_finish:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-  
