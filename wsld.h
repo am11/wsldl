@@ -6,8 +6,10 @@
  * http://opensource.org/licenses/mit-license.php
  */
 
- #ifndef WSLD_H_
- #define WSLD_H_
+#ifndef WSLD_H_
+#define WSLD_H_
+
+#define __STDC_WANT_LIB_EXT1__ 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,8 +20,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 
 typedef HRESULT (WINAPI *WSLISDISTRIBUTIONREBISTERED)(PCWSTR);
 typedef HRESULT (WINAPI *WSLREGISTERDISTRIBUTION)(PCWSTR,PCWSTR);
@@ -70,8 +70,8 @@ int WslApiInit()
     WslGetDistributionConfiguration = (WSLGETDISTRIBUTIONCONFIGURATION)GetProcAddress(WslHmod, "WslGetDistributionConfiguration");
     WslLaunchInteractive = (WSLLAUNCHINTERACTIVE)GetProcAddress(WslHmod, "WslLaunchInteractive");
     WslLaunch = (WSLLAUNCH)GetProcAddress(WslHmod, "WslLaunch");
-    if (WslIsDistributionRegistered == NULL | WslRegisterDistribution == NULL | WslUnregisterDistribution == NULL
-    | WslConfigureDistribution == NULL | WslGetDistributionConfiguration == NULL | WslLaunchInteractive == NULL | WslLaunch == NULL)
+    if (WslIsDistributionRegistered == NULL || WslRegisterDistribution == NULL || WslUnregisterDistribution == NULL
+        || WslConfigureDistribution == NULL || WslGetDistributionConfiguration == NULL || WslLaunchInteractive == NULL || WslLaunch == NULL)
     {
         FreeLibrary(WslHmod);
         fwprintf(stderr,L"ERROR: GetProcAddress() failed to get function address\n");
@@ -83,7 +83,7 @@ return 0;
 }
 
 struct WslInstallation WslGetInstallationInfo(wchar_t *DistributionName) {
-    struct WslInstallation wslInstallation;
+    struct WslInstallation wslInstallation = {.uuid = 0, .basePath = 0};
 
     wchar_t RKey[]=L"Software\\Microsoft\\Windows\\CurrentVersion\\Lxss";
     HKEY hKey;
@@ -95,7 +95,7 @@ struct WslInstallation WslGetInstallationInfo(wchar_t *DistributionName) {
         {
             wchar_t subKeyF[200];
             wcscpy_s(subKeyF,(sizeof(subKeyF)/sizeof(subKeyF[0])),RKey);
-            
+
             wchar_t subKey[200];
             DWORD subKeySz = 100;
             FILETIME ftLastWriteTime;
@@ -130,7 +130,7 @@ struct WslInstallation WslGetInstallationInfo(wchar_t *DistributionName) {
                 if (rres != ERROR_SUCCESS)
                 {
                     fwprintf(stderr,L"ERROR:[%i] Could not read registry key\n", rres);
-                }                
+                }
                 RegCloseKey(hKey);
                 RegCloseKey(hKeyS);
                 return wslInstallation;
