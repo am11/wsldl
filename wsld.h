@@ -19,8 +19,6 @@
 extern "C" {
 #endif
 
-
-
 typedef HRESULT (WINAPI *WSLISDISTRIBUTIONREBISTERED)(PCWSTR);
 typedef HRESULT (WINAPI *WSLREGISTERDISTRIBUTION)(PCWSTR,PCWSTR);
 typedef HRESULT (WINAPI *WSLUNREGISTERDISTRIBUTION)(PCWSTR);
@@ -70,8 +68,8 @@ int WslApiInit()
     WslGetDistributionConfiguration = (WSLGETDISTRIBUTIONCONFIGURATION)GetProcAddress(WslHmod, "WslGetDistributionConfiguration");
     WslLaunchInteractive = (WSLLAUNCHINTERACTIVE)GetProcAddress(WslHmod, "WslLaunchInteractive");
     WslLaunch = (WSLLAUNCH)GetProcAddress(WslHmod, "WslLaunch");
-    if (WslIsDistributionRegistered == NULL | WslRegisterDistribution == NULL | WslUnregisterDistribution == NULL
-    | WslConfigureDistribution == NULL | WslGetDistributionConfiguration == NULL | WslLaunchInteractive == NULL | WslLaunch == NULL)
+    if (WslIsDistributionRegistered == NULL || WslRegisterDistribution == NULL || WslUnregisterDistribution == NULL
+        || WslConfigureDistribution == NULL || WslGetDistributionConfiguration == NULL || WslLaunchInteractive == NULL || WslLaunch == NULL)
     {
         FreeLibrary(WslHmod);
         fwprintf(stderr,L"ERROR: GetProcAddress() failed to get function address\n");
@@ -83,7 +81,7 @@ return 0;
 }
 
 struct WslInstallation WslGetInstallationInfo(wchar_t *DistributionName) {
-    struct WslInstallation wslInstallation;
+    struct WslInstallation wslInstallation = {.uuid = 0, .basePath = 0};
 
     wchar_t RKey[]=L"Software\\Microsoft\\Windows\\CurrentVersion\\Lxss";
     HKEY hKey;
