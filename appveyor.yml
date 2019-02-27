@@ -9,6 +9,7 @@ build_script:
     rc /nologo res\%%~nxD\res.rc &&
     cl /nologo /O2 /W4 /WX /Ob2 /Oi /Oy /Gs- /GF /Gy /Tc main.c /Fe:out\%%~nxD.exe Advapi32.lib Shell32.lib res\%%~nxD\res.res %VersionDefinition%)
 - ps: Compress-Archive -DestinationPath out\icons.zip -Path  (Get-ChildItem -Path out -Exclude Launcher.exe)
+- echo %APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED%
 
 artifacts:
   - path: 'out\icons.zip'
@@ -16,7 +17,7 @@ artifacts:
 
 deploy:
  - provider: GitHub
-   description: $(APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED)
+   description: "$APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED"
    auth_token:
      secure: FAHMAdf6tEGceEb9J7odXO2KYZb8eFnD+dHOX9mE7FRJhw9GEO1wMoynJ5wl38to
    on:
