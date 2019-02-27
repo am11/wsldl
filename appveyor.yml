@@ -17,7 +17,7 @@ artifacts:
 
 deploy:
  - provider: GitHub
-   description: $(APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED)
+   description: "${env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED}"
    auth_token:
      secure: FAHMAdf6tEGceEb9J7odXO2KYZb8eFnD+dHOX9mE7FRJhw9GEO1wMoynJ5wl38to
    on:
