@@ -1,5 +1,5 @@
 environment:
-  APPVEYOR_RDP_PASSWORD: <YOURPASSWORD>
+  APPVEYOR_RDP_PASSWORD: YourPassword1!
 os: Visual Studio 2017
 
 build_script:
