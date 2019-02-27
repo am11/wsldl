@@ -1,10 +1,7 @@
 os: Visual Studio 2017
 
 build_script:
-- echo %0
 - call "%ProgramFiles(x86)%\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat" x64
-- echo %0
-- |
-  FOR /D /r %%D in ("res/*") DO (
+- FOR /D /r %%D in ("res/*") DO (
     rc res\%%~nxD\res.rc &&
     cl /O2 /W4 /WX /Ob2 /Oi /Oy /Gs- /GF /Gy /Tc main.c /Fe:wsldl.exe Advapi32.lib Shell32.lib res\%%~nxD\res.res)
